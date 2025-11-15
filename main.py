@@ -1,0 +1,83 @@
+import numpy as np
+import time
+import sys
+
+# --- 1. IMPORTING ALGORITHM LIBRARY ---
+try:
+    from algorithms import PCA, KNNClassifier, macro_f1_score
+except ImportError:
+    print("ERROR: Could not find 'algorithms.py'")
+    print("Make sure 'algorithms.py' is in the same folder as 'main.py'")
+    sys.exit(1)
+
+
+# --- 2. DATA LOADING & PREP ---
+
+print("Loading data...")
+train_path = 'MNIST_train.csv'
+val_path = 'MNIST_validation.csv'
+
+try:
+    # Loading training data
+    train_data = np.genfromtxt(train_path, delimiter=',', skip_header=1)
+    X_train = train_data[:, 1:]
+    y_train = train_data[:, 0].astype(int)
+
+    # Loading validation data
+    val_data = np.genfromtxt(val_path, delimiter=',', skip_header=1)
+    X_val = val_data[:, 1:]
+    y_val = val_data[:, 0].astype(int)
+except IOError as e:
+    print(f"ERROR: Could not find data files.")
+    print("Make sure 'MNIST_train.csv' and 'MNIST_validation.csv' are in the same folder.")
+    print(e)
+    sys.exit(1)
+
+print("Data loaded. Normalizing and applying PCA...")
+
+# --- 3. NORMALIZATION ---
+X_train_norm = X_train / 255.0
+X_val_norm = X_val / 255.0
+
+# --- 4. PCA (FEATURE REDUCTION) ---
+# This is a optimization step
+N_COMPONENTS = 64
+pca = PCA(n_components=N_COMPONENTS)
+
+# Fitting PCA only on the training data
+pca.fit(X_train_norm)
+
+# Transforming both train and validation data
+X_train_pca = pca.transform(X_train_norm)
+X_val_pca = pca.transform(X_val_norm)
+
+print(f"Data preparation complete. Features reduced from 784 to {N_COMPONENTS}.")
+
+# --- 5. TRAIN & EVALUATE CHAMPION MODEL ---
+
+print("\n--- Training Final Model (Tuned KNN) ---")
+start_time = time.time()
+
+# The best-performing model from all experiments
+CHAMPION_K = 5
+model = KNNClassifier(k=CHAMPION_K)
+
+# Training on the full samples
+model.fit(X_train_pca, y_train)
+
+# --- 6. EVALUATION ---
+print("Evaluating model on validation set...")
+y_pred_val = model.predict(X_val_pca)
+
+end_time = time.time()
+total_runtime = end_time - start_time
+
+# --- 7. FINAL RESULTS ---
+final_score = macro_f1_score(y_val, y_pred_val)
+
+print("\n\n--- !!! FINAL SUBMISSION RESULTS !!! ---")
+print("------------------------------------------")
+print(f"Final Model: K-Nearest Neighbors (k={CHAMPION_K})")
+print(f"Macro F1 Score on Validation Set: {final_score:.4f}")
+print(f"Total Train/Evaluation Time: {total_runtime:.2f} seconds")
+print("------------------------------------------")
