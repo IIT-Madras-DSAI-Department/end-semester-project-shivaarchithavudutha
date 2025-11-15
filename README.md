@@ -3,10 +3,13 @@
 
 ## 📌 Purpose of this Template
 
-This repository is the **starter** for your End Semester Project submission in GitHub Classroom. You can implement your solution and push your work in this repository. Please free to edit this README.md file as per your requirements.
-
+This repository contains the complete End-Semester Project submission, including all from-scratch code, data, and the final report.
 > **Scope (as per assignment brief):**
-> Give an introduction to your repository here: Eg. This repository contains a complete implementation for ...
+> This repository contains a complete from-scratch Python implementation of a multi-class classification system to predict digits (0-9) from the MNIST dataset.
+
+My final submitted model (main.py) is a Tuned K-Nearest Neighbors (k=5) Classifier combined with a Principal Component Analysis (PCA) pre-processing step.
+
+This model was chosen after a rigorous experimental process, detailed in the End-Semester Project Report_ MNIST Digit Classifier.pdf. I found that my tuned KNN model (F1 Score: 0.9568) outperformed all other models I built, including complex stacked ensembles (F1 Score: 0.9489), proving to be the most accurate, robust, and fastest solution.
 
 ---
 
@@ -18,38 +21,37 @@ This repository is the **starter** for your End Semester Project submission in G
 
 ## 📁 Repository Structure
 
-* Describe your repository structure here. Explain about overall code organization.
+* main.py: The main executable file to train and evaluate our final model (KNN).
+
+* algorithms.py: A Python library containing all from-scratch implementations of algorithms used (PCA, KNN, Softmax, RandomForest, KMeans, etc.).
+
+* End-Semester Project Report_MNIST Digit Classifier.pdf: The full PDF report detailing our system architecture, hyper-parameter tuning, optimization steps, and final observations.
+
+* MNIST_train.csv: Training data (required by main.py).
+
+* MNIST_validation.csv: Validation data (required by main.py).
+
+* README.md: This file, explaining the project.
 
 ---
 
 ## 📦 Installation & Dependencies
 
-* Mention all the related instructions for installation of related packages for running your code here.
-
+* Only numpy and scipy are required to run this project.
+``` pip install numpy scipy ```
 ---
 
 ## ▶️ Running the Code
 
-All experiments should be runnable from the command line **and** reproducible in the notebook.
+All required data files are included in this repository. All experiments should be runnable from the command line.
 
 ### A. Command-line (recommended for grading)
 
-* Mention the instructions to run you .py files.
-  
----
-
-## You can further add your own sections/titles along with corresponding contents here:
-
+* To run my final model, reproduce our results, and get the final validation score, simply navigate to the repository's root folder and run:
+  ``` python main.py ```
+* The script will load the data, apply PCA, train the KNN model, and print the final Macro F1 Score and total runtime, which was 5.95 seconds on the test machine.
 ---
 
 ## 🧾 Authors
 
-**<Name, Roll No.>**, IIT Madras (2025–26)
-
-
-## Best Practices:
-* Keep commits with meaningful messages.
-* Please do not write all code on your local machine and push everything to GitHub on the last day. The commits in GitHub should reflect how the code has evolved during the course of the assignment.
-* Collaborations and discussions with other students is strictly prohibited.
-* Code should be modularized and well-commented.
-
+**<M Shivaarchitha Vudutha, DA24B052>**, IIT Madras (2024–28)
